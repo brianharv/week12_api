@@ -11,16 +11,20 @@ class ReviewsController < ApplicationController
   end
 
   def create # POST http://localhost:3000/reviews
-    @review = Review.create(review_params)
-    json_response(@review)
+    @review = Review.create!(review_params)
+    json_response(@review, :created)
   end
 
-  def update # PUT http://localhost:3000/quotes/:id
+  def update # PUT http://localhost:3000/reviews/:id
     @review = Review.find(params[:id])
-    @review.update(review_params)
+    if @review.update!(review_params)
+      render status: 200, json: {
+        message: "This review has been updated successfully."
+    }
+    end  
   end
 
-  def destroy # DELETE http://localhost:3000/quotes/:id
+  def destroy # DELETE http://localhost:3000/reviews/:id
     @review = Review.find(params[:id])
     @review.destroy
   end
@@ -28,9 +32,6 @@ class ReviewsController < ApplicationController
 
   private
 
-  def json_response( object, status = :ok)
-    render json: object, status: status
-  end
   def review_params
     params.permit(:username, :body, :rating, :country, :city)
   end
