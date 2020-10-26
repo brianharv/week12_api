@@ -11,8 +11,11 @@ class ReviewsController < ApplicationController
   end
 
   def create # POST http://localhost:3000/reviews
-    @review = Review.create!(review_params)
-    json_response(@review, :created)
+    if @review = Review.create!(review_params)
+      json_response(@review, :created)
+    else
+      json_response(@review)  
+    end  
   end
 
   def update # PUT http://localhost:3000/reviews/:id
