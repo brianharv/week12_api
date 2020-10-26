@@ -1,3 +1,3 @@
-class Review < ApplicaionRecord
+class Review < ApplicationRecord
 
 end  
