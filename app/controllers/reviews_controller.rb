@@ -2,6 +2,11 @@ class ReviewsController < ApplicationController
 
   def index # GET http://localhost:3000/reviews
     @reviews = Review.all
+    if params[:search_by_rating]
+      @reviews = Review.search_by_rating(params[:search_by_rating])
+    else
+      @reviews = Review.all  
+    end  
     json_response(@reviews)
   end
 
@@ -29,7 +34,11 @@ class ReviewsController < ApplicationController
 
   def destroy # DELETE http://localhost:3000/reviews/:id
     @review = Review.find(params[:id])
-    @review.destroy
+    if @review.destroy
+        render status: 200, json: {
+        message: "This review has been deleted successfully."
+        }
+    end  
   end
   
 
