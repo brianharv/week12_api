@@ -10,21 +10,37 @@ class Seed
 
   def self.begin
     seed = Seed.new
-    seed.generate_reviews
+    Location.destroy_all
+    seed.generate_location_with_reviews
   end
   
-  def generate_reviews
-    50.times do |i|
-      review = Review.create!(
-        username: Faker::Internet.username,
-        body: Faker::Lorem.words(number: 50),
-        rating: (rand 1..5),
+  def generate_location_with_reviews
+    20.times do |i|
+      location = Location.create!(
         country: Faker::Address.country,
         city: Faker::Address.city
       )
-      puts "Review #{i}: Destination: #{review.city}, #{review.country} Author: #{review.username} Body: '#{review.body}' Rating: #{review.rating}."
+      5.times do |j|
+        review = location.reviews.create!(
+          username: Faker::Internet.username,
+          body: Faker::TvShows::MichaelScott.quote,
+          rating: (rand 1..5),
+        )
+      end
+      puts "location #{i}: #{location.country} has #{location.reviews.length} reviews."
     end
   end
+
+  # def generate_reviews
+  #   50.times do |j|
+  #     review = Review.create!(
+  #       username: Faker::Internet.username,
+  #       body: Faker::Lorem.words(number: 50),
+  #       rating: (rand 1..5),
+  #     )
+  #     puts "Review #{i}: Destination: #{review.city}, #{review.country} Author: #{review.username} Body: '#{review.body}' Rating: #{review.rating}."
+  #   end
+  # end
 end  
 
 Seed.begin

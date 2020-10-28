@@ -1,9 +1,12 @@
 class ReviewsController < ApplicationController
 
   def index # GET http://localhost:3000/reviews
-    @reviews = Review.all
+    # @reviews = Review.all
     if params[:search_by_rating]
       @reviews = Review.search_by_rating(params[:search_by_rating])
+    elsif params[:location_id]
+      @location = Location.find(params[:location_id])
+      @reviews = @location.reviews
     else
       @reviews = Review.all  
     end  
@@ -16,7 +19,8 @@ class ReviewsController < ApplicationController
   end
 
   def create # POST http://localhost:3000/reviews
-    if @review = Review.create!(review_params)
+    @location = Location.find(params[:location_id])
+    if @review = @location.reviews.create!(review_params)
       json_response(@review, :created)
     else
       json_response(@review)  
