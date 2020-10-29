@@ -16,6 +16,14 @@ class LocationsController < ApplicationController
     json_response(@location)
   end
 
+  # def show
+  #   @location = Location.find(params[:id])
+  #   respond_to do|format|
+  #     format.html {render :show }
+  #     format.json { render json: @location }
+  #   end  
+  # end
+
   def create # POST http://localhost:3000/locations
     if @location = Location.create!(location_params)
       json_response(@location, :created)
